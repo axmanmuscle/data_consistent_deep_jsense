@@ -30,10 +30,6 @@ parser.add_argument('--val_data', default='/mnt/h/FastMRI/knee/singlecoil_val',
                     type=str, help='Training data directory')
 
 args = parser.parse_args()
-print(args.train_data)
-print(args.val_data)
-
-exit()
 
 plt.rcParams.update({'font.size': 18})
 plt.ioff(); plt.close('all')
@@ -48,14 +44,14 @@ np.random.seed(global_seed)
 torch.backends.cudnn.benchmark = True
 
 # Training files
-core_dir    = '/mnt/h/FastMRI/knee/singlecoil_train'
+# core_dir    = '/mnt/h/FastMRI/knee/singlecoil_train'
 # maps_dir    = '/media/marius/easystore/marius/multicoil_train_Wc0_Espirit_maps'
-train_files = sorted(glob.glob(core_dir + '/*.h5'))
+train_files = sorted(glob.glob(args.train_data + '/*.h5'))
 # train_maps  = sorted(glob.glob(maps_dir + '/*.h5'))
 # Validation files
-core_dir  = '/mnt/h/FastMRI/knee/singlecoil_val'
+# core_dir  = '/mnt/h/FastMRI/knee/singlecoil_val'
 # maps_dir  = '/media/marius/easystore/marius/multicoil_val_Wc0_Espirit_maps'
-val_files = sorted(glob.glob(core_dir + '/*.h5'))
+val_files = sorted(glob.glob(args.val_data  + '/*.h5'))
 # val_maps  = sorted(glob.glob(maps_dir + '/*.h5'))
 
 # How much data are we using
@@ -82,7 +78,7 @@ hparams.use_img_net        = True
 hparams.use_map_net        = True
 hparams.map_init           = 'estimated'
 hparams.img_init           = 'estimated'
-hparams.mps_kernel_shape   = [15, 15, 9] # Always 15 coils
+hparams.mps_kernel_shape   = [15, 15, 9] # Always 15 coils ??
 hparams.l2lam_init         = 0.01
 hparams.l2lam_train        = True
 hparams.meta_unrolls_start = 1 # Starting value
