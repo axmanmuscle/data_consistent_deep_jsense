@@ -20,6 +20,21 @@ from torch.utils.data import DataLoader
 from torch.nn import functional as F
 from matplotlib import pyplot as plt
 
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--train_data', default='/mnt/h/FastMRI/knee/singlecoil_train',
+                    type=str, help='Training data directory')
+parser.add_argument('--val_data', default='/mnt/h/FastMRI/knee/singlecoil_val',
+                    type=str, help='Training data directory')
+
+args = parser.parse_args()
+print(args.train_data)
+print(args.val_data)
+
+exit()
+
 plt.rcParams.update({'font.size': 18})
 plt.ioff(); plt.close('all')
 
@@ -33,15 +48,15 @@ np.random.seed(global_seed)
 torch.backends.cudnn.benchmark = True
 
 # Training files
-core_dir    = '/media/marius/easystore/marius/multicoil_train'
-maps_dir    = '/media/marius/easystore/marius/multicoil_train_Wc0_Espirit_maps'
+core_dir    = '/mnt/h/FastMRI/knee/singlecoil_train'
+# maps_dir    = '/media/marius/easystore/marius/multicoil_train_Wc0_Espirit_maps'
 train_files = sorted(glob.glob(core_dir + '/*.h5'))
-train_maps  = sorted(glob.glob(maps_dir + '/*.h5'))
+# train_maps  = sorted(glob.glob(maps_dir + '/*.h5'))
 # Validation files
-core_dir  = '/media/marius/easystore/marius/multicoil_val'
-maps_dir  = '/media/marius/easystore/marius/multicoil_val_Wc0_Espirit_maps'
+core_dir  = '/mnt/h/FastMRI/knee/singlecoil_val'
+# maps_dir  = '/media/marius/easystore/marius/multicoil_val_Wc0_Espirit_maps'
 val_files = sorted(glob.glob(core_dir + '/*.h5'))
-val_maps  = sorted(glob.glob(maps_dir + '/*.h5'))
+# val_maps  = sorted(glob.glob(maps_dir + '/*.h5'))
 
 # How much data are we using
 # 'num_slices' around 'central_slice' from each scan
@@ -344,4 +359,7 @@ N%d_n%d_ACSlines%d' % (
         plt.grid(); plt.xlabel('Step'); plt.title('Training pix. loss')
         plt.subplot(1, 2, 2); plt.semilogy(ssim_log, linewidth=2.); 
         plt.grid(); plt.xlabel('Step'); plt.title('Training 1 - SSIM')
+
         plt.tight_layout()
+        plt.savefig(local_dir + '/training_behavior_epoch%d.png' % epoch_idx, dpi=300)
+        plt.close()
